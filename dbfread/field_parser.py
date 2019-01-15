@@ -169,6 +169,12 @@ class FieldParser:
         except ValueError:
             if not data.strip():
                 return None
+            
+            # For English: If the value is b'.', we need return '.', or the code will have some error.
+            # For Chinese: 在我的代码中，有的值是'.'，然后运行了之后就报了格式错误，添加下面两行代码可以解决这个问题，返回值是String类型的'.'
+            elif data.strip() == b'.':
+                return '.'
+            
             else:
                 # Account for , in numeric fields
                 return float(data.replace(b',', b'.'))
